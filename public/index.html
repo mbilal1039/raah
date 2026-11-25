@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raah راہ — Career Guidance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <a href="#" class="logo" onclick="showPage('landing'); return false;">Raah <span>راہ</span></a>
+  <nav>
+    <button class="btn-ghost" onclick="showPage('landing')">Home</button>
+    <button class="btn-ghost" onclick="showPage('signup')">Sign up</button>
+    <button class="btn-ghost" onclick="showPage('login')">Log in</button>
+    <button class="btn-ghost" id="logoutBtn" onclick="logout()" style="display:none">Log out</button>
+    <button class="btn-ghost" onclick="toggleLang()" id="langBtn">اردو</button>
+    <button class="btn-ghost" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  </nav>
+</header>
+
+<main id="app">
+
+  <!-- LANDING -->
+  <section id="page-landing" class="page">
+    <div class="hero">
+      <h1>Find Your Path After 10th Grade</h1>
+      <p class="hero-ur" dir="rtl">دسویں جماعت کے بعد اپنی راہ چنیں</p>
+      <p>Answer a few questions about what you enjoy. We'll show careers that fit you — and the exact steps to reach them.</p>
+      <div class="cta-row">
+        <button class="btn-primary" onclick="showPage('signup')">Get Started</button>
+        <button class="btn-secondary" onclick="loginDemo('student')">Try Demo Student</button>
+      </div>
+    </div>
+    <div class="features">
+      <div class="card"><h3>🎯 Match</h3><p>Professions ranked by how well they fit your interests.</p></div>
+      <div class="card"><h3>🗺️ Roadmap</h3><p>Every step: FSc group → test → degree → internship → job.</p></div>
+      <div class="card"><h3>🏢 Companies</h3><p>Real openings and the skills they want — so you know what to learn.</p></div>
+    </div>
+  </section>
+
+  <!-- SIGNUP -->
+  <section id="page-signup" class="page hidden">
+    <h2>Create Account</h2>
+    <form id="signupForm" class="form" onsubmit="handleSignup(event)">
+      <label>Name <input name="name" required /></label>
+      <label>Email <input name="email" type="email" required /></label>
+      <label>Password <input name="password" type="password" minlength="6" required /></label>
+      <label>Role
+        <select name="role" required>
+          <option value="student">Student</option>
+          <option value="professional">Professional</option>
+          <option value="company">Company</option>
+        </select>
+      </label>
+      <button class="btn-primary" type="submit">Sign up</button>
+      <p class="form-msg" id="signupMsg"></p>
+    </form>
+    <p>Already have an account? <a href="#" onclick="showPage('login'); return false;">Log in</a></p>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="page-login" class="page hidden">
+    <h2>Log in</h2>
+    <form class="form" onsubmit="handleLogin(event)">
+      <label>Email <input name="email" type="email" required /></label>
+      <label>Password <input name="password" type="password" required /></label>
+      <button class="btn-primary" type="submit">Log in</button>
+      <p class="form-msg" id="loginMsg"></p>
+    </form>
+    <div class="demo-buttons">
+      <button class="btn-secondary" onclick="loginDemo('student')">Demo Student</button>
+      <button class="btn-secondary" onclick="loginDemo('professional')">Demo Professional</button>
+      <button class="btn-secondary" onclick="loginDemo('company')">Demo Company</button>
+    </div>
+  </section>
+
+  <!-- STUDENT DASHBOARD -->
+  <section id="page-student" class="page hidden">
+    <h2 id="studentGreeting">Hi Student</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>1. Pick your interests</h3>
+        <p class="muted">Select what you enjoy. We'll match professions.</p>
+        <div id="interestChips" class="chips"></div>
+        <button class="btn-primary" onclick="saveInterests()">Save interests</button>
+      </div>
+      <div class="card">
+        <h3>2. Your matched professions</h3>
+        <div id="matchList" class="match-list"><p class="muted">Pick some interests first.</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🏢 Company board — Skills companies want right now</h3>
+      <div id="companyBoard"></div>
+    </div>
+    <div class="card">
+      <h3>📚 Your "skills to learn" list</h3>
+      <div id="skillsToLearn"><p class="muted">Save a profession to see skills.</p></div>
+    </div>
+  </section>
+
+  <!-- MATCHED PROFESSIONS -->
+  <section id="page-matches" class="page hidden">
+    <h2>Matched Professions</h2>
+    <div id="matchesFull"></div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section id="page-roadmap" class="page hidden">
+    <h2 id="roadmapTitle">Roadmap</h2>
+    <div id="roadmapBody"></div>
+  </section>
+
+  <!-- COMPANY BOARD -->
+  <section id="page-company-board" class="page hidden">
+    <h2>Company Board</h2>
+    <div id="boardFull"></div>
+  </section>
+
+  <!-- PROFESSIONAL PROFILE -->
+  <section id="page-pro" class="page hidden">
+    <h2>Professional Dashboard</h2>
+    <form class="form" onsubmit="saveAdvice(event)">
+      <label>Profession <select name="profession" id="proProfession"></select></label>
+      <label>Your career path & advice
+        <textarea name="advice" rows="5" required placeholder="e.g., I did FSc Pre-Engineering, then FAST, then..."></textarea>
+      </label>
+      <button class="btn-primary" type="submit">Post advice</button>
+    </form>
+    <div class="card">
+      <h3>Your posted advice</h3>
+      <div id="myAdvice"></div>
+    </div>
+  </section>
+
+  <!-- COMPANY DASHBOARD -->
+  <section id="page-company" class="page hidden">
+    <h2>Company Dashboard</h2>
+    <form class="form" onsubmit="createOpening(event)">
+      <label>Job title <input name="title" required /></label>
+      <label>Description <textarea name="description" rows="3" required></textarea></label>
+      <label>Required skills (comma-separated)
+        <input name="skills" required placeholder="JavaScript, SQL, Figma" />
+      </label>
+      <button class="btn-primary" type="submit">Post opening</button>
+    </form>
+    <div class="card">
+      <h3>Your openings</h3>
+      <div id="myOpenings"></div>
+    </div>
+    <div class="card">
+      <h3>📈 Skills demand — how many students are learning each skill</h3>
+      <div id="skillDemand"></div>
+    </div>
+  </section>
+
+</main>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

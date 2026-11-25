@@ -1,0 +1,7 @@
+node_modules/
+raah.db
+raah.db-wal
+raah.db-shm
+.env
+*.log
+.DS_Store
